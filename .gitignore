@@ -1,0 +1,6 @@
+.env
+
+logs/
+data/
+
+paperlens.egg-info/
