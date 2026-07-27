@@ -1,6 +1,6 @@
 import logging
 import os
-
+from backend.config import settings
 
 def setup_logger(name: str) -> logging.Logger:
     """
@@ -15,7 +15,7 @@ def setup_logger(name: str) -> logging.Logger:
     if logger.hasHandlers():
         return logger
 
-    logger.setLevel(logging.INFO)
+    logger.setLevel(settings.LOG_LEVEL)
 
     # Formatter
     formatter = logging.Formatter(
