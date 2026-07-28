@@ -17,6 +17,12 @@ class ChatSession(Base):
         DateTime, default=datetime.utcnow
     )
 
+    last_updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
+    )
+
     messages: Mapped[list["ChatMessage"]] = relationship(
         back_populates="session",
         cascade="all, delete-orphan"

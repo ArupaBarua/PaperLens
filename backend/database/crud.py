@@ -3,6 +3,7 @@ from sqlalchemy import select, delete
 
 from backend.database.models import ChatSession, ChatMessage
 from backend.utils.logger import setup_logger
+from datetime import datetime
 
 logger = setup_logger(__name__)
 
@@ -38,7 +39,7 @@ def get_all_sessions(db: Session) -> list[ChatSession]:
     """
 
     statement = (
-        select(ChatSession).order_by(ChatSession.created_at.desc())
+        select(ChatSession).order_by(ChatSession.last_updated_at.desc())
     )
 
     sessions = db.scalars(statement).all()
@@ -107,6 +108,11 @@ def add_message(
     db.add(message)
     db.commit()
     db.refresh(message)
+
+    session = db.get(ChatSession, session_id)
+    session.last_updated_at = datetime.utcnow
+
+    db.commit()
 
     logger.info(f"Added {role} message to session {session_id}")
 
