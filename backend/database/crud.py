@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import select, delete
 
-from backend.database.models import ChatSession, ChatMessage
+from backend.database.models import ChatSession, ChatMessage, Paper
 from backend.utils.logger import setup_logger
 from datetime import datetime
 
@@ -145,4 +145,67 @@ def delete_all_sessions(db: Session) -> None:
     db.commit()
 
     logger.info("Deleted all chat sessions")
+
+def add_paper(
+        db: Session,
+        session_id: int,
+        filename: str,
+        stored_filename: str,
+        file_path: str
+) -> Paper:
+    """
+    Adds a paper to a chat session
+    """
+
+    paper = Paper(
+        session_id=session_id,
+        filename=filename,
+        stored_filename=stored_filename,
+        file_path=file_path
+    )
+
+    db.add(paper)
+    db.commit()
+    db.refresh(paper)
+
+    logger.info(f"Added paper '{filename}' to session id={session_id}")
+
+    return paper
+
+def get_papers(
+    db: Session,
+    session_id: int,
+) -> list[Paper]:
+    """
+    Returns all papers of a chat session
+    """
+
+    statement = (
+        select(Paper).
+        where(Paper.session_id==session_id)
+        .order_by(Paper.uploaded_at.asc())
+    )
+
+    return db.scalars(statement).all()
+
+def delete_paper(
+    db: Session,
+    paper_id: int
+) -> bool:
+    """
+    Deletes a paper
+    """
+
+    paper = db.get(Paper, paper_id)
+
+    if paper is None:
+        return False
+
+    db.delete(paper)
+    db.commit()
+
+    logger.info(f"Delted paper (id={paper_id})")
+
+    return True
+
     

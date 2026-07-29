@@ -28,6 +28,12 @@ class ChatSession(Base):
         cascade="all, delete-orphan"
     )
 
+    papers: Mapped[list["Paper"]] = relationship(
+        back_populates="session",
+        cascade="all, delete-orphan"
+
+    )
+
 class ChatMessage(Base):
     __tablename__ = "chat_messages"
 
@@ -51,4 +57,40 @@ class ChatMessage(Base):
     session: Mapped["ChatSession"] = relationship(
         back_populates="messages"
     )
+
+class Paper(Base):
+    __tablename__ = "papers"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    session_id: Mapped[int] = mapped_column(
+        ForeignKey("chat_sessions.id"),
+        nullable=False
+    )
+
+    filename: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False
+    )
+
+    stored_filename: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+        unique=True
+    )
+
+    file_path: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False
+    )
+
+    uploaded_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow
+    )
+
+    session: Mapped["ChatSession"] = relationship(
+        back_populates="papers"
+    )
+
 
