@@ -7,6 +7,9 @@ python-multipart
 langchain
 langchain-core
 langchain-community
+langchain-text-splitters
+langchain-chroma
+langchain-huggingface
 
 chromadb
 

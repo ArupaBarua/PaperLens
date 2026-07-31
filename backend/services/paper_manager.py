@@ -20,7 +20,7 @@ def upload_paper(
         file: UploadFile
 ):
     """
-    Uploads a paper, stores it on disk,
+    Stores the uploaded paper on disk,
     and creates a database record.
     """
 
