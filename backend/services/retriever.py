@@ -11,17 +11,19 @@ class Retriever:
     Retrieves the most relevant document chunks
     for a user's query.
     """
-    def __init__(self):
-        self.chroma = ChromaManager()
+    def __init__(self, chroma_manager: ChromaManager):
+        self.chroma = chroma_manager
 
-    def retrieve(self, query: str, sesion_id: int) -> list[Document]:
+    def retrieve(self,
+                 query: str, 
+                 session_id: int) -> list[Document]:
         """
         Retrieves the top-k relevant document chunks.
         """
 
         documents = self.chroma.retrieve(
             query=query, 
-            session_id=sesion_id,
+            session_id=session_id,
             k= settings.TOP_K
         )
 

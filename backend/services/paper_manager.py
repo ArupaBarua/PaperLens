@@ -5,6 +5,11 @@ import shutil
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
 
+from backend.database.models import Paper
+from backend.services.pdf_loader import load_pdf
+from backend.services.context_extractor import extract_sections
+from backend.services.text_splitter import split_sections
+from backend.services.chroma_manager import ChromaManager
 from backend.database.crud import add_paper, get_session
 from backend.utils.logger import setup_logger
 
@@ -20,8 +25,9 @@ def upload_paper(
         file: UploadFile
 ):
     """
-    Stores the uploaded paper on disk,
-    and creates a database record.
+    Uploads a paper, stores it on disk,
+    extracts its contents, and indexes it
+    in ChromaDB
     """
 
     # Check if the session exists
@@ -53,7 +59,25 @@ def upload_paper(
         file_path=str(file_path)
     )
 
-    logger.info(f"Uploaded paper '{original_filename}' to session {session_id}")
+    text = load_pdf(pdf_path=file_path)
+
+    sections = extract_sections(text)
+
+    documents = split_sections(
+        sections=sections,
+        session_id=session_id,
+        paper_name=paper.filename
+    )
+
+    chroma_manager = ChromaManager()
+
+    chroma_manager.add_documents(documents=documents)
+
+    logger.info(
+        f"Uploaded, processed, and indexed "
+        f"'{paper.filename}' "
+        f"for session {session_id}."
+    )
 
     return paper
     

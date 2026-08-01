@@ -17,7 +17,7 @@ def optimize_context(
 
         text = document.page_content.strip()
 
-        if text is seen:
+        if text in seen:
             continue
 
         seen.add(text)

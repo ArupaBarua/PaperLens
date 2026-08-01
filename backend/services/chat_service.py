@@ -1,18 +1,38 @@
 from sqlalchemy.orm import Session
 
-from backend.utils.logger import setup_logger
 from backend.database.crud import (
-    add_message,
-    get_session
+    get_session,
+    get_messages,
+    add_message
 )
+from backend.database.models import ChatMessage
+
+from backend.services.chroma_manager import ChromaManager
+from backend.services.retriever import Retriever
+from backend.services.context_optimizer import optimize_context
+from backend.services.prompt_builder import build_prompt
+from backend.services.gemma_client import GemmaClient
+
+from backend.utils.logger import setup_logger
 
 logger = setup_logger(__name__)
+
+chroma_maanger = ChromaManager()
+
+retriever = Retriever(chroma_manager=chroma_maanger)
+
+gemma_client = GemmaClient()
 
 def process_chat(
         db: Session,
         session_id: int,
-        message: str
+        query: str
 ):
+    """
+    Processes a user's query through the complete
+    RAG pipeline and returns the assistant response.
+    """
+
     session = get_session(
         db=db,
         session_id=session_id
@@ -20,18 +40,29 @@ def process_chat(
     if session is None:
         raise ValueError("Session not found.")
 
+    chat_history = get_messages(db=db, session_id=session_id)
+
+    documents = retriever.retrieve(query=query, session_id=session_id)
+
+    optimized_documents = optimize_context(documents=documents)
+
+    messages = build_prompt(
+        question=query,
+        documents=optimized_documents,
+        chat_history=chat_history,
+        conversation_summary=None
+    )
+
+    assistant_reply = gemma_client.generate_response(messages=messages)
+
     add_message(
         db=db,
         session_id=session_id,
         role="user",
-        content=message
+        content=query
     )
 
-    assistant_reply = (
-        "RAG pipeline not implemented yet."
-    )
-
-    assistant_message=add_message(
+    assistant_message = add_message(
         db=db,
         session_id=session_id,
         role="assistant",
