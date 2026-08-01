@@ -2,8 +2,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.routes import chat, session, upload
 from backend.database.database import Base, engine
-from.utils.logger import setup_logger
+from backend.utils.logger import setup_logger
 
 logger = setup_logger(__name__)
 
@@ -34,6 +35,14 @@ app.add_middleware(
 
 app.get("/")
 def root():
+    """
+    Root endpoint.
+    """
+    
     return {
         "message": "PaperLens API is running"
     }
+
+app.include_router(session.router)
+app.include_router(upload.router)
+app.include_router(chat.router)

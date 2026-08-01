@@ -1,4 +1,4 @@
-__pycache__/
+backend/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -58,3 +58,5 @@ data/chat.db
 *.tmp
 *.temp
 *.bak
+
+uploaded_papers/

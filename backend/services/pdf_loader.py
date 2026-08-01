@@ -5,7 +5,7 @@ from backend.utils.logger import setup_logger
 
 logger = setup_logger(__name__)
 
-def extract_text(pdf_path: str) -> str:
+def load_pdf(pdf_path: str) -> str:
     """
     Extracts raw text from a PDF file.
     """
