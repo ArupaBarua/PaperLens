@@ -1,0 +1,308 @@
+/* ===========================
+   Chat Messages
+=========================== */
+
+.message {
+
+    display: flex;
+
+    width: 100%;
+
+    margin-bottom: 24px;
+
+}
+
+.message.user {
+
+    justify-content: flex-end;
+
+}
+
+.message.assistant {
+
+    justify-content: flex-start;
+
+}
+
+/* ===========================
+   Bubble
+=========================== */
+
+.message-bubble {
+
+    max-width: 75%;
+
+    padding: 16px 20px;
+
+    border-radius: 18px;
+
+    line-height: 1.7;
+
+    font-size: 0.95rem;
+
+    word-wrap: break-word;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
+
+}
+
+.user .message-bubble {
+
+    background: var(--primary-color);
+
+    color: white;
+
+    border-bottom-right-radius: 6px;
+
+}
+
+.assistant .message-bubble {
+
+    background: var(--surface-color);
+
+    color: var(--text-primary);
+
+    border-bottom-left-radius: 6px;
+
+}
+
+/* ===========================
+   Markdown
+=========================== */
+
+.message-bubble h1,
+.message-bubble h2,
+.message-bubble h3,
+.message-bubble h4 {
+
+    margin-top: 18px;
+
+    margin-bottom: 12px;
+
+}
+
+.message-bubble p {
+
+    margin-bottom: 12px;
+
+}
+
+.message-bubble ul,
+.message-bubble ol {
+
+    margin-left: 22px;
+
+    margin-bottom: 12px;
+
+}
+
+.message-bubble li {
+
+    margin-bottom: 6px;
+
+}
+
+.message-bubble strong {
+
+    font-weight: 600;
+
+}
+
+.message-bubble em {
+
+    font-style: italic;
+
+}
+
+/* ===========================
+   Code
+=========================== */
+
+.message-bubble code {
+
+    background: #1b1b1b;
+
+    padding: 2px 6px;
+
+    border-radius: 6px;
+
+    font-family: Consolas, monospace;
+
+    font-size: 0.9rem;
+
+}
+
+.message-bubble pre {
+
+    background: #171717;
+
+    padding: 16px;
+
+    border-radius: 12px;
+
+    overflow-x: auto;
+
+    margin: 16px 0;
+
+}
+
+.message-bubble pre code {
+
+    background: transparent;
+
+    padding: 0;
+
+}
+
+/* ===========================
+   Tables
+=========================== */
+
+.message-bubble table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin: 16px 0;
+
+}
+
+.message-bubble th,
+.message-bubble td {
+
+    border: 1px solid var(--border-color);
+
+    padding: 10px;
+
+    text-align: left;
+
+}
+
+.message-bubble th {
+
+    background: #3a3a3a;
+
+}
+
+/* ===========================
+   Blockquote
+=========================== */
+
+.message-bubble blockquote {
+
+    border-left: 4px solid var(--primary-color);
+
+    padding-left: 14px;
+
+    color: var(--text-secondary);
+
+    margin: 14px 0;
+
+}
+
+/* ===========================
+   Typing Indicator
+=========================== */
+
+.typing {
+
+    display: flex;
+
+    gap: 6px;
+
+    padding: 14px 18px;
+
+    width: fit-content;
+
+    border-radius: 18px;
+
+    background: var(--surface-color);
+
+}
+
+.typing span {
+
+    width: 8px;
+
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: var(--text-secondary);
+
+    animation: bounce 1.2s infinite;
+
+}
+
+.typing span:nth-child(2) {
+
+    animation-delay: .2s;
+
+}
+
+.typing span:nth-child(3) {
+
+    animation-delay: .4s;
+
+}
+
+@keyframes bounce {
+
+    0%,
+    80%,
+    100% {
+
+        transform: translateY(0);
+
+    }
+
+    40% {
+
+        transform: translateY(-5px);
+
+    }
+
+}
+
+/* ===========================
+   Welcome Screen
+=========================== */
+
+.welcome {
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+}
+
+.welcome h1 {
+
+    font-size: 2.8rem;
+
+    margin-bottom: 12px;
+
+}
+
+.welcome p {
+
+    font-size: 1rem;
+
+    color: var(--text-secondary);
+
+    max-width: 550px;
+
+    line-height: 1.8;
+
+}

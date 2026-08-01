@@ -37,7 +37,7 @@ def chat(
         assistant_message = process_chat(
             db=db,
             session_id=session_id,
-            message=message.content
+            query=message.content
         )
 
         logger.info(f"Processed chat for session {session_id}")

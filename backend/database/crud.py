@@ -110,7 +110,7 @@ def add_message(
     db.refresh(message)
 
     session = db.get(ChatSession, session_id)
-    session.last_updated_at = datetime.utcnow
+    session.last_updated_at = datetime.utcnow()
 
     db.commit()
 

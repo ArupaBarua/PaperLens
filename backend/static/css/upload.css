@@ -1,0 +1,235 @@
+/* =========================================
+   Upload Modal Overlay
+========================================= */
+
+.modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    backdrop-filter: blur(6px);
+
+    z-index: 1000;
+
+    opacity: 1;
+
+    transition: opacity .25s ease;
+
+}
+
+.modal.hidden {
+
+    display: none;
+
+}
+
+/* =========================================
+   Modal Card
+========================================= */
+
+.modal-content {
+
+    width: 520px;
+
+    max-width: 92%;
+
+    background: var(--sidebar-color);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 18px;
+
+    box-shadow: 0 20px 50px rgba(0,0,0,.45);
+
+    overflow: hidden;
+
+}
+
+/* =========================================
+   Header
+========================================= */
+
+.modal-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 24px;
+
+    border-bottom: 1px solid var(--border-color);
+
+}
+
+.modal-header h2 {
+
+    font-size: 1.25rem;
+
+    font-weight: 600;
+
+}
+
+.close-btn {
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: var(--text-secondary);
+
+    border: none;
+
+    font-size: 1.4rem;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+}
+
+.close-btn:hover {
+
+    background: var(--surface-color);
+
+    color: white;
+
+}
+
+/* =========================================
+   Body
+========================================= */
+
+.modal-body {
+
+    padding: 28px 24px;
+
+}
+
+.upload-drop-zone {
+
+    border: 2px dashed var(--border-color);
+
+    border-radius: 14px;
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+    transition: .2s;
+
+    cursor: pointer;
+
+}
+
+.upload-drop-zone:hover {
+
+    border-color: var(--primary-color);
+
+    background: rgba(255,255,255,.03);
+
+}
+
+.upload-icon {
+
+    font-size: 3rem;
+
+    margin-bottom: 14px;
+
+}
+
+.upload-title {
+
+    font-size: 1rem;
+
+    margin-bottom: 8px;
+
+}
+
+.upload-subtitle {
+
+    color: var(--text-secondary);
+
+    font-size: .9rem;
+
+}
+
+#paper-file {
+
+    display: none;
+
+}
+
+/* =========================================
+   Footer
+========================================= */
+
+.modal-footer {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    padding: 20px 24px;
+
+    border-top: 1px solid var(--border-color);
+
+}
+
+.secondary-btn {
+
+    padding: 11px 22px;
+
+    background: transparent;
+
+    color: white;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 10px;
+
+    transition: .2s;
+
+}
+
+.secondary-btn:hover {
+
+    background: var(--surface-color);
+
+}
+
+.primary-btn {
+
+    padding: 11px 24px;
+
+    background: var(--primary-color);
+
+    color: white;
+
+    border-radius: 10px;
+
+    transition: .2s;
+
+}
+
+.primary-btn:hover {
+
+    background: var(--primary-hover);
+
+}

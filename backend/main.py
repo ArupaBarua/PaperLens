@@ -1,9 +1,16 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from fastapi import Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
 from backend.routes import chat, session, upload
 from backend.database.database import Base, engine
+
 from backend.utils.logger import setup_logger
 
 logger = setup_logger(__name__)
@@ -33,15 +40,26 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.get("/")
-def root():
+templates = Jinja2Templates(
+    directory="backend/templates"
+)
+
+app.mount(
+    "/static",
+    StaticFiles(directory="backend/static"),
+    name="static"
+)
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
     """
-    Root endpoint.
+    Returns the main PaperLens web page.
     """
-    
-    return {
-        "message": "PaperLens API is running"
-    }
+
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html"
+    )
 
 app.include_router(session.router)
 app.include_router(upload.router)

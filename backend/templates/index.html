@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PaperLens</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='css/style.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='css/sidebar.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='css/chat.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='css/upload.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- ================= Sidebar ================= -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-top">
+
+                <h1 class="logo">
+                    PaperLens
+                </h1>
+
+                <button
+                    id="new-chat-btn"
+                    class="new-chat-btn"
+                >
+                    + New Chat
+                </button>
+
+                <input
+                    id="session-search"
+                    type="text"
+                    placeholder="Search chats..."
+                    class="search-box"
+                >
+
+            </div>
+
+            <div
+                id="session-list"
+                class="session-list"
+            >
+            </div>
+
+            <div class="sidebar-bottom">
+
+                <h3 class="paper-title">
+                    Uploaded Papers
+                </h3>
+
+                <div
+                    id="paper-list"
+                    class="paper-list"
+                >
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- ================= Main ================= -->
+
+        <main class="main">
+
+            <header class="chat-header">
+
+                <h2 id="chat-title">
+                    New Chat
+                </h2>
+
+            </header>
+
+            <section
+                id="chat-container"
+                class="chat-container"
+            >
+
+                <div class="welcome">
+
+                    <h1>
+                        Welcome to PaperLens!
+                    </h1>
+
+                    <p>
+                        Upload research papers and ask questions about them.
+                    </p>
+
+                </div>
+
+            </section>
+
+            <footer class="chat-input-area">
+
+                <button
+                    id="upload-paper-btn"
+                    class="attach-btn"
+                    title="Upload PDF"
+                >
+                    📎
+                </button>
+
+                <textarea
+                    id="message-input"
+                    placeholder="Ask anything about your papers..."
+                    rows="1"
+                ></textarea>
+
+                <button
+                    id="send-btn"
+                    class="send-btn"
+                >
+                    ➤
+                </button>
+
+            </footer>
+
+        </main>
+
+    </div>
+
+    {% include "components/upload_model.html" %}
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script src="{{ url_for('static', path='js/utils.js') }}"></script>
+
+    <script src="{{ url_for('static', path='js/api.js') }}"></script>
+
+    <script src="{{ url_for('static', path='js/markdown.js') }}"></script>
+
+    <script src="{{ url_for('static', path='js/sidebar.js') }}"></script>
+
+    <script src="{{ url_for('static', path='js/chat.js') }}"></script>
+
+    <script src="{{ url_for('static', path='js/upload.js') }}"></script>
+
+    <script src="{{ url_for('static', path='js/app.js') }}"></script>
+
+</body>
+
+</html>
