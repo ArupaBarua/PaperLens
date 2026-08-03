@@ -126,14 +126,17 @@ function initializeUpload() {
 // Open
 // =========================================
 
-function openUploadModal() {
+async function openUploadModal() {
 
-    if (
-        appState.currentSessionId === null
-    ) {
+    try {
+
+        await ensureSession();
+
+    }
+    catch (error) {
 
         showError(
-            "Create a chat first."
+            error.message
         );
 
         return;
@@ -243,9 +246,7 @@ async function uploadPaper() {
             "paper-file"
         );
 
-    if (
-        input.files.length === 0
-    ) {
+    if (input.files.length === 0) {
 
         showError(
             "Select a PDF first."
@@ -257,34 +258,46 @@ async function uploadPaper() {
 
     try {
 
+        console.log("STEP 1");
+
         const response =
             await API.uploadPaper(
                 appState.currentSessionId,
                 input.files[0]
             );
 
+        console.log("STEP 2", response);
+
         appState.uploadedPapers =
             await API.getPapers(
                 appState.currentSessionId
             );
 
+        console.log("STEP 3", appState.uploadedPapers);
+
         renderPaperList(
             appState.uploadedPapers
         );
 
+        console.log("STEP 4");
+
         closeUploadModal();
+
+        console.log("STEP 5");
 
         showSuccess(
             response.message
         );
 
+        console.log("STEP 6");
+
     }
 
     catch (error) {
 
-        showError(
-            error.message
-        );
+        console.error(error);
+
+        showError(error.message);
 
     }
 

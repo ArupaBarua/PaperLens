@@ -68,44 +68,21 @@ function autoResizeTextarea() {
 
 async function sendMessage() {
 
-    // Automatically create a session if none exists
-    if (appState.currentSessionId === null) {
+    try {
 
-        try {
+        await ensureSession();
+        
+        console.log("isNewSession =", appState.isNewSession);
 
-            const session =
-                await API.createSession(
-                    "New Chat"
-                );
+    }
 
-            appState.sessions.unshift(
-                session
-            );
+    catch (error) {
 
-            renderSessionList(
-                appState.sessions
-            );
+        showError(
+            error.message
+        );
 
-            appState.currentSessionId =
-                session.id;
-
-            highlightSession(
-                session.id
-            );
-
-            showWelcomeScreen();
-
-        }
-
-        catch (error) {
-
-            showError(
-                error.message
-            );
-
-            return;
-
-        }
+        return;
 
     }
 
@@ -145,6 +122,40 @@ async function sendMessage() {
     appState.isWaitingForResponse = true;
 
     try {
+
+        if (appState.isNewSession) {
+
+            console.log("Renaming session...");
+            console.log(appState.currentSessionId);
+
+            let title = 
+                message.trim();
+
+            if (title.length > 40) {
+
+                title = 
+                    title.substring(0, 40) + "...";
+            }
+
+            await API.renameSession(
+                appState.currentSessionId,
+                title
+            );
+
+            appState.sessions =
+                await API.getSessions();
+
+            renderSessionList(
+                appState.sessions
+            );
+
+            highlightSession(
+                appState.currentSessionId
+            );
+
+            appState.isNewSession = false;
+            
+        }
 
         const response =
             await API.sendMessage(

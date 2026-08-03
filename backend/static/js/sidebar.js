@@ -26,42 +26,18 @@ function initializeSidebar() {
 
 async function createNewChat() {
 
-    try {
+    console.log("New Chat clicked");
 
-        const session =
-            await API.createSession(
-                "New Chat"
-            );
+    appState.currentSessionId = null;
+    appState.isNewSession = false;
 
-        appState.sessions.unshift(
-            session
-        );
+    console.log("currentSessionId =", appState.currentSessionId);
 
-        renderSessionList(
-            appState.sessions
-        );
+    highlightSession(-1);
 
-        appState.currentSessionId =
-            session.id;
+    renderPaperList([]);
 
-        highlightSession(
-            session.id
-        );
-
-        renderPaperList([]);
-
-        showWelcomeScreen();
-
-    }
-
-    catch (error) {
-
-        showError(
-            error.message
-        );
-
-    }
-
+    showWelcomeScreen();
 }
 
 // =========================

@@ -1,45 +1,41 @@
-<aside class="sidebar">
+<div class="sidebar-top">
 
-    <div class="sidebar-header">
+    <h1 class="logo">
+        PaperLens
+    </h1>
 
-        <h2 class="logo">
-            PaperLens
-        </h2>
+    <button
+        id="new-chat-btn"
+        class="new-chat-btn"
+    >
+        + New Chat
+    </button>
 
-        <button
-            id="new-chat-btn"
-            class="new-chat-btn"
-        >
-            + New Chat
-        </button>
+    <input
+        id="session-search"
+        type="text"
+        placeholder="Search chats..."
+        class="search-box"
+    >
 
-    </div>
+</div>
 
-    <div class="sidebar-search">
+<div
+    id="session-list"
+    class="session-list"
+>
+</div>
 
-        <input
-            type="text"
-            id="session-search"
-            placeholder="Search conversations..."
-        >
+<div class="sidebar-bottom">
 
-    </div>
+    <h3 class="paper-title">
+        Uploaded Papers
+    </h3>
 
     <div
-        id="session-list"
-        class="session-list"
+        id="paper-list"
+        class="paper-list"
     >
     </div>
 
-    <div class="sidebar-footer">
-
-        <button
-            id="upload-paper-btn"
-            class="upload-btn"
-        >
-            Upload Paper
-        </button>
-
-    </div>
-
-</aside>
+</div>

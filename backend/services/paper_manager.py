@@ -25,9 +25,7 @@ def upload_paper(
         file: UploadFile
 ):
     """
-    Uploads a paper, stores it on disk,
-    extracts its contents, and indexes it
-    in ChromaDB
+    Uploads a paper, stores it on disk
     """
 
     # Check if the session exists
@@ -59,25 +57,45 @@ def upload_paper(
         file_path=str(file_path)
     )
 
-    text = load_pdf(pdf_path=file_path)
 
-    sections = extract_sections(text)
+    logger.info(
+        f"Uploaded {paper.filename}' for session {session_id}."
+    )
+
+    return paper
+
+
+def process_paper(
+    session_id: int,
+    paper_name: str,
+    file_path: Path
+):
+    """
+    Extracts text, creates chunks, generates embeddings,
+    and stores them in ChromaDB.
+    """
+
+    text = load_pdf(
+        pdf_path=file_path
+    )
+
+    sections = extract_sections(
+        text
+    )
 
     documents = split_sections(
         sections=sections,
         session_id=session_id,
-        paper_name=paper.filename
+        paper_name=paper_name
     )
 
     chroma_manager = ChromaManager()
 
-    chroma_manager.add_documents(documents=documents)
-
-    logger.info(
-        f"Uploaded, processed, and indexed "
-        f"'{paper.filename}' "
-        f"for session {session_id}."
+    chroma_manager.add_documents(
+        documents=documents
     )
 
-    return paper
+    logger.info(
+        f"Finished indexing '{paper.filename}'."
+    )
     

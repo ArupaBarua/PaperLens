@@ -72,20 +72,24 @@ const API = {
 
     async renameSession(sessionId, title) {
 
-        return request(`/sessions/${sessionId}`, {
+        console.log("Renaming:", sessionId, title);
 
-            method: "PUT",
+        const result = await request(
+            `/sessions/${sessionId}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    title
+                })
+            }
+        );
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+        console.log("Rename response:", result);
 
-            body: JSON.stringify({
-                title
-            })
-
-        });
-
+        return result;
     },
 
     async deleteSession(sessionId) {

@@ -42,47 +42,7 @@
 
         <aside class="sidebar">
 
-            <div class="sidebar-top">
-
-                <h1 class="logo">
-                    PaperLens
-                </h1>
-
-                <button
-                    id="new-chat-btn"
-                    class="new-chat-btn"
-                >
-                    + New Chat
-                </button>
-
-                <input
-                    id="session-search"
-                    type="text"
-                    placeholder="Search chats..."
-                    class="search-box"
-                >
-
-            </div>
-
-            <div
-                id="session-list"
-                class="session-list"
-            >
-            </div>
-
-            <div class="sidebar-bottom">
-
-                <h3 class="paper-title">
-                    Uploaded Papers
-                </h3>
-
-                <div
-                    id="paper-list"
-                    class="paper-list"
-                >
-                </div>
-
-            </div>
+            {% include "components/sidebar.html" %}
 
         </aside>
 

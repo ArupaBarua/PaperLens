@@ -10,7 +10,9 @@ const appState = {
 
     uploadedPapers: [],
 
-    isWaitingForResponse: false
+    isWaitingForResponse: false,
+
+    isNewSession: false
 
 };
 
@@ -145,4 +147,39 @@ function showWelcomeScreen() {
 
     `;
 
+}
+
+
+async function ensureSession() {
+
+    console.log("Before:", appState.currentSessionId);
+
+    if (appState.currentSessionId !== null) {
+
+        console.log("Returning early");
+
+        return;
+
+    }
+
+    console.log("Creating session");
+
+    const session = await API.createSession("New Chat");
+
+    console.log("Created:", session.id);
+
+    appState.sessions.unshift(session);
+
+    renderSessionList(appState.sessions);
+
+    appState.currentSessionId = session.id;
+
+    appState.isNewSession = true;
+
+    console.log("After:", appState.currentSessionId);
+    console.log("isNewSession:", appState.isNewSession);
+
+    highlightSession(session.id);
+
+    renderPaperList([]);
 }

@@ -1,9 +1,11 @@
+from pathlib import Path
 from fastapi import (
     APIRouter,
     Depends,
     HTTPException,
     UploadFile,
-    File
+    File,
+    BackgroundTasks
 )
 from sqlalchemy.orm import Session
 
@@ -11,7 +13,7 @@ from backend.database.database import get_db
 from backend.database.crud import get_papers, delete_paper
 
 from backend.schemas.upload import PaperResponse, UploadResponse
-from backend.services.paper_manager import upload_paper
+from backend.services.paper_manager import upload_paper, process_paper
 from backend.utils.logger import setup_logger
 
 logger = setup_logger(__name__)
@@ -27,6 +29,7 @@ router = APIRouter(
 )
 def upload(
     session_id: int,
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
@@ -41,6 +44,13 @@ def upload(
             db=db,
             session_id=session_id,
             file=file
+        )
+
+        background_tasks.add_task(
+            process_paper,
+            session_id=session_id,
+            paper_name=paper.filename,
+            file_path=Path(paper.file_path)
         )
 
         logger.info(f"Uploaded '{paper.filename}'")
