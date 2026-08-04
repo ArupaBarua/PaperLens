@@ -212,15 +212,15 @@ async function deleteSession(
             appState.sessions
         );
 
-        if (
-            appState.currentSessionId === sessionId
-        ) {
+        appState.currentSessionId = null;
 
-            appState.currentSessionId = null;
+        appState.uploadedPapers = [];
 
-            showWelcomeScreen();
+        renderPaperList([]);
 
-        }
+        highlightSession(-1);
+
+        showWelcomeScreen();
 
     }
 

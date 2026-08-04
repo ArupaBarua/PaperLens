@@ -24,6 +24,7 @@ class ChromaManager:
         )
         
         logger.info("Initialized ChromaDB.")
+        
 
     def add_documents(
             self,
@@ -62,15 +63,18 @@ class ChromaManager:
         logger.info(f"Retrieved {len(documents)} documents for {query} in session {session_id}")
 
         return documents
+    
 
     def delete_documents(
             self,
-            ids: list[str]
+            session_id: int
     ) -> None:
         """
-        Deletes documents from the vector store.
+        Deletes every document belonging to a chat session
         """
 
-        self.vector_store.delete(ids=ids)
+        self.vector_store.delete(where={
+            "session_id": session_id
+        })
 
-        logger.info(f"Deleted {len(ids)} documents from ChromaDB")
+        logger.info(f"Deleted all chroma documents for session id ({session_id})")

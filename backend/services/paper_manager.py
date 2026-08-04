@@ -96,6 +96,6 @@ def process_paper(
     )
 
     logger.info(
-        f"Finished indexing '{paper.filename}'."
+        f"Finished indexing '{paper_name}'."
     )
     

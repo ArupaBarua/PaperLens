@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     CHUNK_OVERLAP: int = 200
     TOP_K: int = 10
 
+    MEMORY_TRIGGER: int = 50
+    MESSAGES_TO_SUMMARIZE: int = 30
+    RECENT_MESSAGE_LIMIT: int = 20
+
     # Logging
     LOG_LEVEL: str = "INFO"
 

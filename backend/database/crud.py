@@ -208,4 +208,56 @@ def delete_paper(
 
     return True
 
-    
+
+def update_conversation_summary(
+    db: Session,
+    session_id: int,
+    summary: str
+) -> ChatSession | None:
+    """
+    Updates the conversation summary for a chat session.
+    """
+
+    session = get_session(
+        db=db,
+        session_id=session_id
+    )
+
+    if session_id is None:
+        raise ValueError(f"Session not found for session id {session_id}")
+
+    session.conversation_summary = summary
+
+    db.commit()
+
+    db.refresh(session)
+
+    logger.info(f"Updated conversation summary for session id ({session_id})")
+
+    return session
+
+
+def delete_oldest_messages(
+        db: Session, 
+        session_id: int,
+        limit: int
+) -> None:
+    """
+    Deletes the oldest messages from a chat session.
+    """
+    session = get_session(db=db, session_id=session_id)
+
+    if session is None:
+        raise ValueError(f"Session not found for session id {session_id}")
+
+    messages = db.scalars(
+        select(ChatMessage)
+        .where(ChatMessage.session_id == session_id)
+        .order_by(ChatMessage.created_at)
+        .limit(limit)
+    ).all()
+
+    for message in messages:
+        db.delete(message)
+
+    db.commit()

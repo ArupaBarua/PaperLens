@@ -10,6 +10,7 @@ class SessionUpdate(BaseModel):
 class SessionResponse(BaseModel):
     id: int
     title: str
+    conversation_summary: str | None
     created_at: datetime
     last_updated_at: datetime
 

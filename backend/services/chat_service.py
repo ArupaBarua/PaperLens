@@ -12,6 +12,7 @@ from backend.services.retriever import Retriever
 from backend.services.context_optimizer import optimize_context
 from backend.services.prompt_builder import build_prompt
 from backend.services.gemma_client import GemmaClient
+from backend.services.conversation_memory import update_chat_conversation_summary
 
 from backend.utils.logger import setup_logger
 
@@ -22,6 +23,7 @@ chroma_maanger = ChromaManager()
 retriever = Retriever(chroma_manager=chroma_maanger)
 
 gemma_client = GemmaClient()
+
 
 def process_chat(
         db: Session,
@@ -40,6 +42,26 @@ def process_chat(
     if session is None:
         raise ValueError("Session not found.")
 
+    add_message(
+        db=db,
+        session_id=session_id,
+        role="user",
+        content=query
+    )
+
+    chat_history = get_messages(db=db, session_id=session_id)
+
+    update_chat_conversation_summary(
+        db=db,
+        session_id=session_id,
+        chat_history=chat_history
+    )
+
+    session = get_session(
+        db=db,
+        session_id=session_id
+    )
+
     chat_history = get_messages(db=db, session_id=session_id)
 
     documents = retriever.retrieve(query=query, session_id=session_id)
@@ -50,17 +72,10 @@ def process_chat(
         question=query,
         documents=optimized_documents,
         chat_history=chat_history,
-        conversation_summary=None
+        conversation_summary=session.conversation_summary
     )
 
     assistant_reply = gemma_client.generate_response(messages=messages)
-
-    add_message(
-        db=db,
-        session_id=session_id,
-        role="user",
-        content=query
-    )
 
     assistant_message = add_message(
         db=db,

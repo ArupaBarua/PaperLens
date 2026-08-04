@@ -10,11 +10,18 @@ class ChatSession(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     title: Mapped[str] = mapped_column(
-        String(255), nullable=False
+        String(255), 
+        nullable=False
+    )
+
+    conversation_summary: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True
     )
 
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow
+        DateTime, 
+        default=datetime.utcnow
     )
 
     last_updated_at: Mapped[datetime] = mapped_column(
