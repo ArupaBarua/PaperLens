@@ -10,7 +10,8 @@ from backend.services.pdf_loader import load_pdf
 from backend.services.context_extractor import extract_sections
 from backend.services.text_splitter import split_sections
 from backend.services.chroma_manager import ChromaManager
-from backend.database.crud import add_paper, get_session
+from backend.services.figure_extractor import FigureExtractor
+from backend.database.crud import add_paper, get_session, save_figures
 from backend.utils.logger import setup_logger
 
 logger = setup_logger(__name__)
@@ -66,6 +67,7 @@ def upload_paper(
 
 
 def process_paper(
+    db: Session,
     session_id: int,
     paper_name: str,
     file_path: Path
@@ -93,6 +95,19 @@ def process_paper(
 
     chroma_manager.add_documents(
         documents=documents
+    )
+
+    figure_extractor = FigureExtractor()
+
+    figures = figure_extractor.extract(
+        pdf_path=file_path,
+        session_id=session_id,
+        paper_name=paper_name
+    )
+
+    save_figures(
+        db=db,
+        figures=figures
     )
 
     logger.info(

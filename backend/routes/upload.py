@@ -48,6 +48,7 @@ def upload(
 
         background_tasks.add_task(
             process_paper,
+            db=db,
             session_id=session_id,
             paper_name=paper.filename,
             file_path=Path(paper.file_path)

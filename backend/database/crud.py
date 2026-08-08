@@ -1,8 +1,10 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import select, delete
 
-from backend.database.models import ChatSession, ChatMessage, Paper
+from backend.database.models import ChatSession, ChatMessage, Paper, Figure
+from backend.schemas.figure import FigureInfo
 from backend.utils.logger import setup_logger
+
 from datetime import datetime
 
 logger = setup_logger(__name__)
@@ -80,6 +82,7 @@ def delete_session(
     session = db.get(ChatSession, session_id)
 
     if session is None:
+        logger.warning(f"Session id ({session_id}) is not found")
         return False
 
     db.delete(session)
@@ -199,6 +202,7 @@ def delete_paper(
     paper = db.get(Paper, paper_id)
 
     if paper is None:
+        logger.warning(f"Paper id ({paper_id}) is not found")
         return False
 
     db.delete(paper)
@@ -224,6 +228,7 @@ def update_conversation_summary(
     )
 
     if session_id is None:
+        logger.error(f"Session not found for session id {session_id}")
         raise ValueError(f"Session not found for session id {session_id}")
 
     session.conversation_summary = summary
@@ -248,6 +253,7 @@ def delete_oldest_messages(
     session = get_session(db=db, session_id=session_id)
 
     if session is None:
+        logger.error(f"Session not found for session id {session_id}")
         raise ValueError(f"Session not found for session id {session_id}")
 
     messages = db.scalars(
@@ -261,3 +267,96 @@ def delete_oldest_messages(
         db.delete(message)
 
     db.commit()
+
+
+def save_figures(db: Session,
+                 figures: list[FigureInfo]) -> None:
+    """
+    Saves extracted figures to the database.
+    """
+
+    for figure in figures:
+
+        db.add(
+            Figure(
+                session_id=figure.session_id,
+                paper_name=figure.paper_name,
+                page_number=figure.page_number,
+                figure_number=figure.figure_number,
+                figure_caption=figure.figure_caption,
+                image_path=figure.image_path
+            )
+        )
+    db.commit()
+
+    logger.info(f"Saved {len(figures)} figures to the database")
+
+    for figure in figures:
+        print(
+            figure.figure_number,
+            figure.figure_caption
+        )
+
+
+def get_figure_by_number(
+    db: Session,
+    session_id: int,
+    figure_number: str
+) -> Figure | None:
+    """
+    Retrieves a figure by its figure number.
+    """
+
+    statement = (
+        select(Figure)
+        .where(
+            Figure.session_id == session_id,
+            Figure.figure_number == figure_number
+        )
+    )
+
+    figure = db.scalar(statement)
+
+    if figure is None:
+
+        logger.warning(f"Figure {figure_number} not found for session {session_id}")
+
+    else:
+
+        logger.info(f"Retrieved Figure {figure_number} from session {session_id}")
+
+    return figure
+
+
+def get_figure_by_caption(
+    db: Session,
+    session_id: int,
+    caption: str 
+) -> Figure | None:
+    """
+    Retrieves a figure by matching its caption.
+    """
+
+    statement = (
+        select(Figure)
+        .where(Figure.session_id==session_id,
+               Figure.figure_caption.ilike(f"%{caption}")
+               )
+    )
+
+    figure = db.scalars(statement).first()
+
+    if figure is None:
+        logger.warning(
+            f"No figure found with caption containing "
+            f"'{caption}' in session {session_id}."
+        )
+
+    else:
+        logger.info(
+            f"Retrieved figure "
+            f"'{figure.figure_number}' "
+            f"using caption search."
+        )
+
+    return figure

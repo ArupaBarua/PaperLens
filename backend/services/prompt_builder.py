@@ -70,7 +70,7 @@ Be concise, factual, well-structured, and honest. Do not fabricate citations or 
         )
 
     user_message = f"""
-Research Context:
+Relevant Paper Context:
 
 {context}
 

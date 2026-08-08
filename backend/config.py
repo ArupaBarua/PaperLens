@@ -4,9 +4,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # API Keys
     OPENROUTER_API_KEY: str
+    OPENAI_API_KEY: str
 
     # Models
     LLM_MODEL: str = "google/gemma-4-26b-a4b-it:free"
+    VISION_MODEL: str = "gpt-4o-mini"
     EMBEDDING_MODEL: str = "BAAI/bge-base-en-v1.5"
 
     # Database

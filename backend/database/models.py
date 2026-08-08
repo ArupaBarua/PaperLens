@@ -41,6 +41,11 @@ class ChatSession(Base):
 
     )
 
+    figures: Mapped[list["Figure"]] = relationship(
+        back_populates="session",
+        cascade="all, delete-orphan"
+    )
+
 class ChatMessage(Base):
     __tablename__ = "chat_messages"
 
@@ -104,5 +109,42 @@ class Paper(Base):
     session: Mapped["ChatSession"] = relationship(
         back_populates="papers"
     )
+
+
+class Figure(Base):
+    __tablename__ = "figures"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    session_id: Mapped[int] = mapped_column(
+        ForeignKey("chat_sessions.id"),
+        nullable=False
+    )
+
+    paper_name: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False
+    )
+
+    page_number: Mapped[int] = mapped_column(
+        nullable=False
+    )
+
+    figure_number: Mapped[str | None] = mapped_column(
+        String(50),
+    )
+
+    figure_caption: Mapped[str | None] = mapped_column(
+        Text
+    )
+
+    image_path: Mapped[str] = mapped_column(
+        Text
+    )
+
+    session: Mapped["ChatSession"] = relationship(
+        back_populates="figures"
+    )
+
 
 
