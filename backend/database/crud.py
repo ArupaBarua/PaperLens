@@ -340,7 +340,7 @@ def get_figure_by_caption(
     statement = (
         select(Figure)
         .where(Figure.session_id==session_id,
-               Figure.figure_caption.ilike(f"%{caption}")
+               Figure.figure_caption.ilike(f"%{caption}%")
                )
     )
 

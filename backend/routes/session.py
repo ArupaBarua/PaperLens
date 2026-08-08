@@ -49,7 +49,7 @@ def create_new_session(session: SessionCreate,
     "/",
     response_model=list[SessionResponse]
 )
-def get_session(db: Session = Depends(get_db)):
+def get_all_chat_sessions(db: Session = Depends(get_db)):
     """
     Returns all chat sessions.
     """
